@@ -1,11 +1,10 @@
-import os
-from PIL import Image as PILImage
-from agno.agent import Agent
-from agno.models.google import Gemini
 import streamlit as st
-from agno.tools.duckduckgo import DuckDuckGoTools
 from agno.media import Image as AgnoImage
-
+from agno import Agent
+from agno.models import Gemini
+from agno.tools import DuckDuckGoTools
+from PIL import Image as PILImage
+from agno.media import AgnoImage
 if "GOOGLE_API_KEY" not in st.session_state:
     st.session_state.GOOGLE_API_KEY = None
 
@@ -43,7 +42,7 @@ with st.sidebar:
 
 medical_agent = Agent(
     model=Gemini(
-        id="gemini-2.0-flash",
+        model="gemini-2.0-flash-exp",
         api_key=st.session_state.GOOGLE_API_KEY
     ),
     tools=[DuckDuckGoTools()],

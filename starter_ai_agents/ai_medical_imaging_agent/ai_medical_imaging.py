@@ -1,25 +1,25 @@
 import streamlit as st
 from agno.media import Image as AgnoImage
-from langchain_google_genai import ChatGoogleGenerativeAI
+try:    from langchain_google_genai import ChatGoogleGenerativeAI
+
+except ImportError:
+    st.error("❌ langchain_google_genai package not found. Please install it with: pip install langchain-google-genai")
+    st.stop()
 from PIL import Image as PILImage
 import os
 
 if "GOOGLE_API_KEY" not in st.session_state:
     st.session_state.GOOGLE_API_KEY = None
+    st.session_state.GOOGLE_API_KEY = "AIzaSyAJGMkbk2JiHeHkq_9iMLDKsG3yTHgdN2k"
 
 with st.sidebar:
     st.title("ℹ️ Configuration")
-<<<<<<< HEAD
     
     # Set the API key directly
     st.session_state.GOOGLE_API_KEY = "AIzaSyAJGMkbk2JiHeHkq_9iMLDKsG3yTHgdN2k"
-    
     # Check if API key is already set
     if not st.session_state.GOOGLE_API_KEY:
         api_key = st.text_input(
-=======
-    st.session_state.GOOGLE_API_KEY = "AIzaSyAJGMkbk2JiHeHkq_9iMLDKsG3yTHgdN2k"
->>>>>>> origin/main
             "Enter your Google API Key:",
             type="password",
             help="Enter your Google AI Studio API key to enable medical image analysis"
@@ -92,13 +92,14 @@ if st.session_state.GOOGLE_API_KEY:
         medical_agent = Agent(
             role="Medical Imaging Specialist",
             goal="Provide comprehensive medical image analysis with professional radiological expertise",
-            backstory="""You are a board-certified radiologist with over 15 years of experience in diagnostic imaging. 
+            backstory="""You are a board-certified radiologist with over 15 years of experience in diagnostic imaging.
             You specialize in interpreting X-rays, MRIs, CT scans, ultrasounds, and other medical imaging modalities. 
             You have extensive training in identifying abnormalities, making differential diagnoses, and communicating 
             findings clearly to both medical professionals and patients. You stay current with the latest medical 
             literature and imaging protocols.""",
             model=ChatGoogleGenerativeAI(
-                google_api_key=st.session_state.GOOGLE_API_KEY
+                google_api_key=st.session_state.GOOGLE_API_KEY,
+                model="gemini-1.5-flash"
             ),
             tools=[],
             markdown=True

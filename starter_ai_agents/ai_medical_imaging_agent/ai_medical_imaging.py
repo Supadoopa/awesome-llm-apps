@@ -3,17 +3,16 @@ from agno.media import Image as AgnoImage
 from langchain_google_genai import ChatGoogleGenerativeAI
 from PIL import Image as PILImage
 import os
+from duckduckgo_search import DDGS
 
+# Initialize session state for API key
 if "GOOGLE_API_KEY" not in st.session_state:
     st.session_state.GOOGLE_API_KEY = None
-    st.session_state.GOOGLE_API_KEY = "AIzaSyAJGMkbk2JiHeHkq_9iMLDKsG3yTHgdN2k"
 
 with st.sidebar:
     st.title("ℹ️ Configuration")
     
-    # Set the API key directly
-    st.session_state.GOOGLE_API_KEY = "AIzaSyAJGMkbk2JiHeHkq_9iMLDKsG3yTHgdN2k"
-    # Check if API key is already set
+    # API Key configuration
     if not st.session_state.GOOGLE_API_KEY:
         api_key = st.text_input(
             "Enter your Google API Key:",
@@ -49,36 +48,16 @@ with st.sidebar:
         "All analyses should be reviewed by qualified healthcare professionals. "
         "**Do not make medical decisions based solely on this analysis.**"
     )
-    st.title("ℹ️ Configuration")
-    st.session_state.GOOGLE_API_KEY = "AIzaSyAJGMkbk2JiHeHkq_9iMLDKsG3yTHgdN2k"
-    if not st.session_state.GOOGLE_API_KEY:
-        api_key = st.text_input(
-            "Enter your Google Key:",
-            type="password"
-        )
-        st.caption(
-            "Get your API key from [Google AI Studio]"
-            "(https://aistudio.google.com/apikey) 🔑"
-        )
-        if api_key:
-            st.session_state.GOOGLE_API_KEY = api_key
-            st.success("API Key saved!")
-            st.rerun()
-    else:
-        st.success("API Key is configured")
-        if st.button("🔄 Reset API Key"):
-            st.session_state.GOOGLE_API_KEY = None
-            st.rerun()
-    
-    st.info(
-        "This tool provides AI-powered analysis of medical imaging data using "
-        "advanced computer vision and radiological expertise."
-    )
-    st.warning(
-        "⚠DISCLAIMER: This tool is for educational and informational purposes only. "
-        "All analyses should be reviewed by qualified healthcare professionals. "
-        "Do not make medical decisions based solely on this analysis."
-    )
+
+# Define search tool for medical research
+def search_medical_literature(query):
+    """Search for medical literature using DuckDuckGo"""
+    try:
+        with DDGS() as ddgs:
+            results = list(ddgs.text(query, max_results=3))
+            return results
+    except Exception as e:
+        return f"Search error: {e}"
 
 # Initialize medical agent only if key is available
 medical_agent = None
@@ -97,7 +76,7 @@ if st.session_state.GOOGLE_API_KEY:
                 google_api_key=st.session_state.GOOGLE_API_KEY,
                 model="gemini-1.5-flash"
             ),
-            tools=[],
+            tools=[search_medical_literature],
             markdown=True
         )
     except Exception as e:
@@ -136,10 +115,9 @@ You are a highly skilled medical imaging expert with extensive knowledge in radi
 - Address common patient concerns related to these findings
 
 ### 5. Research Context
-IMPORTANT: Use the DuckDuckGo search tool to:
+IMPORTANT: Use the search_medical_literature tool to:
 - Find recent medical literature about similar cases
 - Search for standard treatment protocols
-- Provide a list of relevant medical links of them too
 - Research any relevant technological advances
 - Include 2-3 key references to support your analysis
 

@@ -13,6 +13,7 @@ An AI-powered medical imaging analysis tool that provides professional-grade ana
 - **Research Integration**: Uses DuckDuckGo search to find relevant medical literature and treatment protocols
 - **Professional Interface**: Clean, intuitive Streamlit interface for easy image upload and analysis
 - **Safety Warnings**: Built-in disclaimers and safety notifications
+- **Secure API Key Management**: Secure handling of API keys with session state
 
 ## 📋 Prerequisites
 
@@ -34,6 +35,13 @@ An AI-powered medical imaging analysis tool that provides professional-grade ana
    - Create a new API key
    - Copy the key for use in the application
 
+## 🔐 Security Notes
+
+- **Never commit API keys to version control**
+- The application uses session state to store API keys temporarily
+- API keys are cleared when you reset them or close the session
+- A `.gitignore` file is included to prevent accidental commits of sensitive files
+
 ## 🎯 Usage
 
 1. **Run the application**:
@@ -44,6 +52,7 @@ An AI-powered medical imaging analysis tool that provides professional-grade ana
 2. **Configure API Key**:
    - Enter your Google API key in the sidebar
    - The key will be securely stored in the session
+   - You can reset the key anytime using the reset button
 
 3. **Upload Medical Image**:
    - Supported formats: JPG, JPEG, PNG, DICOM
@@ -94,11 +103,12 @@ An AI-powered medical imaging analysis tool that provides professional-grade ana
 
 ## 🔧 Technical Details
 
-- **AI Model**: Gemini 2.0 Flash Experimental
+- **AI Model**: Gemini 1.5 Flash
 - **Framework**: Streamlit for web interface
 - **Image Processing**: PIL (Python Imaging Library)
-- **Search Integration**: DuckDuckGo Tools
+- **Search Integration**: DuckDuckGo Search
 - **Media Handling**: Agno framework
+- **Agent Framework**: CrewAI
 
 ## 🛡️ Safety & Privacy
 
@@ -106,6 +116,7 @@ An AI-powered medical imaging analysis tool that provides professional-grade ana
 - **Local Processing**: Image analysis happens locally with secure API calls
 - **Professional Review**: All results should be reviewed by healthcare professionals
 - **Educational Use**: Designed for learning and research purposes
+- **Secure API Handling**: API keys are managed securely in session state
 
 ## 🐛 Troubleshooting
 
@@ -114,6 +125,7 @@ An AI-powered medical imaging analysis tool that provides professional-grade ana
 1. **API Key Error**:
    - Ensure your Google API key is valid and has sufficient credits
    - Check that the key is properly entered in the sidebar
+   - Try resetting the API key if issues persist
 
 2. **Image Upload Issues**:
    - Verify the image format is supported (JPG, JPEG, PNG, DICOM)
@@ -122,10 +134,16 @@ An AI-powered medical imaging analysis tool that provides professional-grade ana
 3. **Analysis Failures**:
    - Check your internet connection for research functionality
    - Verify the image quality is sufficient for analysis
+   - Ensure all dependencies are properly installed
 
 4. **Dependency Issues**:
    - Run `pip install -r requirements.txt` to ensure all packages are installed
    - Check Python version compatibility (3.8+)
+   - If using a virtual environment, ensure it's activated
+
+5. **Search Functionality Issues**:
+   - Ensure internet connection is available
+   - Check if DuckDuckGo search is accessible in your region
 
 ## 📝 License
 

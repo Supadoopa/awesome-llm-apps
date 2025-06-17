@@ -1,19 +1,15 @@
 import streamlit as st
 from agno.media import Image as AgnoImage
-from agno import Agent
-from agno.models import Gemini
-from agno.tools import DuckDuckGoTools
+from langchain_google_genai import ChatGoogleGenerativeAI
 from PIL import Image as PILImage
 import os
-    
+
 if "GOOGLE_API_KEY" not in st.session_state:
     st.session_state.GOOGLE_API_KEY = None
 
 with st.sidebar:
     st.title("ℹ️ Configuration")
-    
-    if not st.session_state.GOOGLE_API_KEY:
-        api_key = st.text_input(
+    st.session_state.GOOGLE_API_KEY = "AIzaSyAJGMkbk2JiHeHkq_9iMLDKsG3yTHgdN2k"
             "Enter your Google API Key:",
             type="password"
         )

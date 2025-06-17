@@ -1,20 +1,59 @@
 import streamlit as st
 from agno.media import Image as AgnoImage
-from agno import Agent
-from agno.models import Gemini
-from agno.tools import DuckDuckGoTools
+from langchain_google_genai import ChatGoogleGenerativeAI
 from PIL import Image as PILImage
 import os
-    
+
 if "GOOGLE_API_KEY" not in st.session_state:
     st.session_state.GOOGLE_API_KEY = None
 
 with st.sidebar:
     st.title("ℹ️ Configuration")
     
+    # Set the API key directly
+    st.session_state.GOOGLE_API_KEY = "AIzaSyAJGMkbk2JiHeHkq_9iMLDKsG3yTHgdN2k"
+    
+    # Check if API key is already set
     if not st.session_state.GOOGLE_API_KEY:
         api_key = st.text_input(
             "Enter your Google API Key:",
+            type="password",
+            help="Enter your Google AI Studio API key to enable medical image analysis"
+        )
+        st.caption(
+            "Get your API key from [Google AI Studio]"
+            "(https://aistudio.google.com/apikey) 🔑"
+        )
+        if api_key:
+            st.session_state.GOOGLE_API_KEY = api_key
+            st.success("✅ API Key saved successfully!")
+            st.rerun()
+    else:
+        st.success("✅ API Key is configured")
+        if st.button("🔄 Reset API Key", help="Clear the current API key"):
+            st.session_state.GOOGLE_API_KEY = None
+            st.rerun()
+    
+    st.markdown("---")
+    
+    st.info(
+        "🔬 **About this tool:**\n\n"
+        "This application provides AI-powered analysis of medical imaging data using "
+        "advanced computer vision and radiological expertise. Upload medical images "
+        "to receive detailed analysis and insights."
+    )
+    
+    st.warning(
+        "⚠️ **IMPORTANT DISCLAIMER:**\n\n"
+        "This tool is for **educational and informational purposes only**. "
+        "All analyses should be reviewed by qualified healthcare professionals. "
+        "**Do not make medical decisions based solely on this analysis.**"
+    )
+    st.title("ℹ️ Configuration")
+    st.session_state.GOOGLE_API_KEY = "AIzaSyAJGMkbk2JiHeHkq_9iMLDKsG3yTHgdN2k"
+    if not st.session_state.GOOGLE_API_KEY:
+        api_key = st.text_input(
+            "Enter your Google Key:",
             type="password"
         )
         st.caption(
@@ -41,16 +80,23 @@ with st.sidebar:
         "Do not make medical decisions based solely on this analysis."
     )
 
-# Initialize medical agent only if API key is available
+# Initialize medical agent only if key is available
 medical_agent = None
 if st.session_state.GOOGLE_API_KEY:
     try:
+        from crewai import Agent
         medical_agent = Agent(
-            model=Gemini(
-                model="gemini-2.0-flash-exp",
-                api_key=st.session_state.GOOGLE_API_KEY
+            role="Medical Imaging Specialist",
+            goal="Provide comprehensive medical image analysis with professional radiological expertise",
+            backstory="""You are a board-certified radiologist with over 15 years of experience in diagnostic imaging. 
+            You specialize in interpreting X-rays, MRIs, CT scans, ultrasounds, and other medical imaging modalities. 
+            You have extensive training in identifying abnormalities, making differential diagnoses, and communicating 
+            findings clearly to both medical professionals and patients. You stay current with the latest medical 
+            literature and imaging protocols.""",
+            model=ChatGoogleGenerativeAI(
+                google_api_key=st.session_state.GOOGLE_API_KEY
             ),
-            tools=[DuckDuckGoTools()],
+            tools=[],
             markdown=True
         )
     except Exception as e:

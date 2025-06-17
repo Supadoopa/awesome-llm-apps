@@ -9,6 +9,7 @@ if "GOOGLE_API_KEY" not in st.session_state:
 
 with st.sidebar:
     st.title("ℹ️ Configuration")
+<<<<<<< HEAD
     
     # Set the API key directly
     st.session_state.GOOGLE_API_KEY = "AIzaSyAJGMkbk2JiHeHkq_9iMLDKsG3yTHgdN2k"
@@ -16,6 +17,9 @@ with st.sidebar:
     # Check if API key is already set
     if not st.session_state.GOOGLE_API_KEY:
         api_key = st.text_input(
+=======
+    st.session_state.GOOGLE_API_KEY = "AIzaSyAJGMkbk2JiHeHkq_9iMLDKsG3yTHgdN2k"
+>>>>>>> origin/main
             "Enter your Google API Key:",
             type="password",
             help="Enter your Google AI Studio API key to enable medical image analysis"

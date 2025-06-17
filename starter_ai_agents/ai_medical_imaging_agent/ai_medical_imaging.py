@@ -43,14 +43,14 @@ with st.sidebar:
 
 # Initialize medical agent only if API key is available
 medical_agent = None
-if st.session_state.GOOGLE_API_KEY:
+if st.session_state.GOOGLE_API_KEY: 
     try:
-        medical_agent = Agent(
-            model=Gemini(
-                model="gemini-2.0-flash-exp",
-                api_key=st.session_state.GOOGLE_API_KEY
-            ),
-            tools=[DuckDuckGoTools()],
+        from crewai import Agent
+        from langchain_google_genai import ChatGoogleGenerativeAI
+        
+                google_api_key=st.session_state.GOOGLE_API_KEY
+            model=ChatGoogleGenerativeAI(
+            tools=[],
             markdown=True
         )
     except Exception as e:

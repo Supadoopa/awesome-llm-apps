@@ -1,10 +1,6 @@
 import streamlit as st
 from agno.media import Image as AgnoImage
-try:    from langchain_google_genai import ChatGoogleGenerativeAI
-
-except ImportError:
-    st.error("❌ langchain_google_genai package not found. Please install it with: pip install langchain-google-genai")
-    st.stop()
+from langchain_google_genai import ChatGoogleGenerativeAI
 from PIL import Image as PILImage
 import os
 

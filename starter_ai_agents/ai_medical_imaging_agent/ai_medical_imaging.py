@@ -70,13 +70,18 @@ if st.session_state.GOOGLE_API_KEY:
             backstory="""You are a board-certified radiologist with over 15 years of experience in diagnostic imaging.
             You specialize in interpreting X-rays, MRIs, CT scans, ultrasounds, and other medical imaging modalities. 
             You have extensive training in identifying abnormalities, making differential diagnoses, and communicating 
-            findings clearly to both medical professionals and patients. You stay current with the latest medical 
-            literature and imaging protocols.""",
-            model=ChatGoogleGenerativeAI(
-                google_api_key=st.session_state.GOOGLE_API_KEY,
-                model="gemini-1.5-flash"
-            ),
-            tools=[search_medical_literature],
+            findings clearly to both medical professionals and patients.""",
+            verbose=True,
+            allow_delegation=False,
+            tools=[search_medical_literature]
+        )
+    except Exception as e:
+        st.error(f"Error initializing agent: {e}")
+        medical_agent = None
+            backstory="""You are a board-certified radiologist with over 15 years of experience in diagnostic imaging.
+            You specialize in interpreting X-rays, MRIs, CT scans, ultrasounds, and other medical imaging modalities. 
+            You have extensive training in identifying abnormalities, making differential diagnoses, and communicating 
+Looking at the lint error, the issue is that `ChatGoogleGenerativeAI` doesn't have a parameter named `google_api_key`. The correct parameter name should be `api_key`.
             markdown=True
         )
     except Exception as e:
